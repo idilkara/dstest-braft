@@ -1,0 +1,29 @@
+TestConfig:
+  Name: etcd-test
+  Experiments: 1
+  Iterations: 5
+  WaitDuration: 50 # Time duration to wait between execution steps in milliseconds
+  StartupDuration: 1 # seconds
+SchedulerConfig: #TODO - Seperate the scheduler param
+  Type: "random"
+  Steps: 100
+  Seed: 42
+  Params: {"client_request_probability": 0.01}
+FaultConfig:
+  Faults: []
+NetworkConfig:
+  BaseReplicaPort: 6000
+  BaseInterceptorPort: 10000
+  Protocol: http
+  MessageType: GRPC
+ProcessConfig:
+  NumReplicas: 3
+  Timeout: 10
+  OutputDir: output
+  ReplicaScript: scripts/etcd_server.sh
+  ClientScripts: [ scripts/etcd_client.sh ]
+  CleanScript: scripts/etcd_clean.sh
+  ReplicaParams:
+    - "6000 10001 10002 n0"
+    - "10000 6001 10002 n1"
+    - "10000 10001 6002 n2"
