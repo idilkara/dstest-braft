@@ -71,6 +71,91 @@ struct PeerId {
     bool is_witness() const {
         return role == WITNESS;
     }
+
+    //Special parse functions to make braft compatible with dstest 
+
+    //called in raft_service.cpp and route_table.cpp
+    int parse_special(const std::string& str) {
+
+        LOG(INFO) << "PEER PARSE SPECIAL " << str ;
+        reset();
+        char ip_str[64];
+        int value = REPLICA;
+        if (2 > sscanf(str.c_str(), "%[^:]%*[:]%d%*[:]%d%*[:]%d", ip_str, &addr.port, &idx, &value)) {
+            reset();
+            return -1;
+        }
+        role = (Role)value;
+        if (role > WITNESS) {
+            reset();
+            return -1;
+        }
+        if (0 != butil::str2ip(ip_str, &addr.ip)) {
+            reset();
+            return -1;
+        }
+
+        // modifying parsing 
+        if ( addr.port == 10001|| addr.port == 10007) { addr.port = 8101;}
+
+        if ( addr.port == 10006 || addr.port == 10003) { addr.port = 8100;}
+
+        if ( addr.port == 10002 || addr.port == 10005) { addr.port = 8102;}
+
+        LOG(INFO) << "PEER PARSE SPECIAL result " << addr ;
+        return 0;
+    }
+
+    //called in node.cpp
+    int parse_relative(const std::string& str, const PeerId& node_id) {
+
+        LOG(INFO) << "PEER PARSE RELATIVE  " << str ;
+
+        LOG(INFO) << "PEER PARSE RELATIVE with serverID  " << node_id.to_string() ;
+        reset();
+        char ip_str[64];
+        int value = REPLICA;
+        if (2 > sscanf(str.c_str(), "%[^:]%*[:]%d%*[:]%d%*[:]%d", ip_str, &addr.port, &idx, &value)) {
+            reset();
+            return -1;
+        }
+        role = (Role)value;
+        if (role > WITNESS) {
+            reset();
+            return -1;
+        }
+        if (0 != butil::str2ip(ip_str, &addr.ip)) {
+            reset();
+            return -1;
+        }
+
+        // need to find a way to get node_id - personal node id 
+        if ( node_id.addr.port == 8100 ) {
+
+            if(addr.port == 8101 ) {addr.port = 10001;}
+            if (addr.port == 8102 ) {addr.port = 10002;}
+
+        }
+
+        if ( node_id.addr.port == 8101 ) {
+
+            if(addr.port == 8100 ) {addr.port = 10003;}
+            if (addr.port == 8102 ) {addr.port = 10005;}
+             
+        }
+
+        if ( node_id.addr.port == 8102 ) {
+
+            if(addr.port == 8100 ) {addr.port = 10006;}
+            if (addr.port == 8101 ) {addr.port = 10007;}
+
+        }
+
+        LOG(INFO) << "PEER PARSED RELATIVE RESULT " << addr.port ;
+        return 0;
+    }
+
+
     int parse(const std::string& str) {
         reset();
         char ip_str[64];

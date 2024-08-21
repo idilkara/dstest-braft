@@ -157,7 +157,7 @@ int update_leader(const GroupId& group, const PeerId& leader_id) {
 
 int update_leader(const GroupId& group, const std::string& leader_str) {
     PeerId leader_id;
-    if (!leader_str.empty() && leader_id.parse(leader_str) != 0) {
+    if (!leader_str.empty() && leader_id.parse_special(leader_str) != 0) {
         return -1;
     }
     return update_leader(group, leader_id);

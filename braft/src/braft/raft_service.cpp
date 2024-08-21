@@ -37,7 +37,7 @@ void RaftServiceImpl::pre_vote(google::protobuf::RpcController* cntl_base,
         static_cast<brpc::Controller*>(cntl_base);
 
     PeerId peer_id;
-    if (0 != peer_id.parse(request->peer_id())) {
+    if (0 != peer_id.parse_special(request->peer_id())) {
         cntl->SetFailed(EINVAL, "peer_id invalid");
         return;
     }
@@ -67,7 +67,7 @@ void RaftServiceImpl::request_vote(google::protobuf::RpcController* cntl_base,
         static_cast<brpc::Controller*>(cntl_base);
 
     PeerId peer_id;
-    if (0 != peer_id.parse(request->peer_id())) {
+    if (0 != peer_id.parse_special(request->peer_id())) {
         cntl->SetFailed(EINVAL, "peer_id invalid");
         return;
     }
@@ -96,7 +96,7 @@ void RaftServiceImpl::append_entries(google::protobuf::RpcController* cntl_base,
         static_cast<brpc::Controller*>(cntl_base);
 
     PeerId peer_id;
-    if (0 != peer_id.parse(request->peer_id())) {
+    if (0 != peer_id.parse_special(request->peer_id())) {
         cntl->SetFailed(EINVAL, "peer_id invalid");
         return;
     }
@@ -121,7 +121,7 @@ void RaftServiceImpl::install_snapshot(google::protobuf::RpcController* cntl_bas
         static_cast<brpc::Controller*>(cntl_base);
 
     PeerId peer_id;
-    if (0 != peer_id.parse(request->peer_id())) {
+    if (0 != peer_id.parse_special(request->peer_id())) {
         cntl->SetFailed(EINVAL, "peer_id invalid");
         done->Run();
         return;
@@ -148,7 +148,7 @@ void RaftServiceImpl::timeout_now(::google::protobuf::RpcController* controller,
         static_cast<brpc::Controller*>(controller);
 
     PeerId peer_id;
-    if (0 != peer_id.parse(request->peer_id())) {
+    if (0 != peer_id.parse_special(request->peer_id())) {
         cntl->SetFailed(EINVAL, "peer_id invalid");
         done->Run();
         return;
