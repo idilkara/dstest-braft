@@ -98,7 +98,7 @@ struct PeerId {
     //called in raft_service.cpp and route_table.cpp
     int parse_special(const std::string& str) {
 
-        LOG(INFO) << "PEER PARSE SPECIAL " << str ;
+        //LOG(INFO) << "PEER PARSE SPECIAL " << str ;
         reset();
         char ip_str[64];
         int value = REPLICA;
@@ -123,16 +123,16 @@ struct PeerId {
 
         if ( addr.port == 10002 || addr.port == 10005) { addr.port = 8102;}
 
-        LOG(INFO) << "PEER PARSE SPECIAL result " << addr ;
+        //LOG(INFO) << "PEER PARSE SPECIAL result " << addr ;
         return 0;
     }
 
     //called in node.cpp
     int parse_relative(const std::string& str, const PeerId& node_id) {
 
-        LOG(INFO) << "PEER PARSE RELATIVE  " << str ;
+        //LOG(INFO) << "PEER PARSE RELATIVE  " << str ;
 
-        LOG(INFO) << "PEER PARSE RELATIVE with serverID  " << node_id.to_string() ;
+        //LOG(INFO) << "PEER PARSE RELATIVE with serverID  " << node_id.to_string() ;
         reset();
         char ip_str[64];
         int value = REPLICA;
@@ -172,7 +172,7 @@ struct PeerId {
 
         }
 
-        LOG(INFO) << "PEER PARSED RELATIVE RESULT " << addr.port ;
+        //LOG(INFO) << "PEER PARSED RELATIVE RESULT " << addr.port ;
         return 0;
     }
 

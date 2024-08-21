@@ -1622,11 +1622,11 @@ void NodeImpl::pre_vote(std::unique_lock<raft_mutex_t>* lck, bool triggered) {
                         " configuration is possibly out of date";
         return;
     }
-    if (!_conf.contains(_server_id)) {
-        LOG(WARNING) << "node " << _group_id << ':' << _server_id
-                     << " can't do pre_vote as it is not in " << _conf.conf;
-        return;
-    }
+    // if (!_conf.contains(_server_id)) {
+    //     LOG(WARNING) << "node " << _group_id << ':' << _server_id
+    //                  << " can't do pre_vote as it is not in " << _conf.conf;
+    //     return;
+    // }
 
     int64_t old_term = _current_term;
     // get last_log_id outof node mutex
