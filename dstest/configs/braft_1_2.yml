@@ -1,16 +1,16 @@
 TestConfig:
-  Name: n0af-bnjgg
+  Name: B0-random-DM3
   Experiments: 1
-  Iterations: 1
+  Iterations: 100
   WaitDuration: 10 # Time duration to wait between execution steps in milliseconds
   StartupDuration: 6 #so msg Q is not empty
 SchedulerConfig:
-  Type: "posconflict" 
+  Type: "random" 
   Steps: 400
   Seed: 16
-  Params: {"client_request_probability": 0.0, "d": 5,"fault_probability": 0.05} 
-  ClientRequests: 1
-  FaultQuota: 1
+  Params:  {"fault_probability": 0.05} 
+  ClientRequests: 0
+  FaultQuota: 3
 NetworkConfig:
   BaseReplicaPort: 8100
   BaseInterceptorPort: 10000
@@ -18,14 +18,12 @@ NetworkConfig:
   MessageType: GRPC
 FaultConfig:
   Faults: 
-      Type: dropmessage
-      Params:
 ProcessConfig:
   NumReplicas: 3
   Timeout: 30
   OutputDir: output
   ReplicaScript: scripts/braft_server_relative.sh
-  ClientScripts: [ scripts/braft_client1.sh , scripts/braft_client2.sh ,  scripts/braft_client3.sh ] # 
+  ClientScripts: [] # 
   CleanScript: scripts/braft_clean.sh
   ReplicaParams:
     - "8100 10001 10002 0 8100"
