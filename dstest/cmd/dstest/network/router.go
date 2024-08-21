@@ -53,8 +53,12 @@ func (r *Router) Init(NetworkManager *Manager, numReplicas int) {
 // queue message
 func (r *Router) QueueMessage(m *Message) {
 	// decode the message
-	tm := r.MessageTranslator.Translate(m)
-	// tm :=  m
+	
+	//tm := r.MessageTranslator.Translate(m)
+	//tm :=  m
+
+	tm := r.MessageTranslator.TranslateBRPC(m) 
+
 	if r.HasConnectivity(tm.Sender, tm.Receiver) {
 		r.NetworkManager.MessageQueues[tm.Receiver].PushBack(tm)
 		// r.NetworkManager.UpdateChainClocks(tm.Sender, tm.Receiver, tm.MessageId, tm.Name)

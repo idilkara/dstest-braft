@@ -160,7 +160,7 @@ int update_leader(const GroupId& group, const std::string& leader_str) {
     if (!leader_str.empty() && leader_id.parse_special(leader_str) != 0) {
         return -1;
     }
-    return update_leader(group, leader_id);
+    return update_leader(group, leader_id);  
 }
 
 butil::Status refresh_leader(const GroupId& group, int timeout_ms) {

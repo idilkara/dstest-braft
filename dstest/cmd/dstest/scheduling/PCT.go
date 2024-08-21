@@ -13,8 +13,10 @@ type PCT struct {
 	Scheduler
 	Config                   *config.Config
 	RequestQuota             int
+	FaultQuota             int
 	NumClientTypes           int
 	ClientRequestProbability float64
+	FaultProbability float64
 	NetworkManager           *network.Manager
 	Rand                     *rand.Rand
 	Depth                    int
@@ -44,6 +46,8 @@ func (s *PCT) Init(config *config.Config) {
 	for i := 0; i < s.Config.ProcessConfig.NumReplicas; i++ {
 		s.InitialPriorities = append(s.InitialPriorities, s.distinctRandomInteger(s.Config.ProcessConfig.NumReplicas, s.InitialPriorities))
 	}
+	s.FaultQuota = config.SchedulerConfig.FaultQuota
+	s.FaultProbability = config.SchedulerConfig.Params["fault_probability"].(float64)
 }
 
 func (s *PCT) distinctRandomInteger(max int, arr []int) int {
@@ -80,9 +84,11 @@ func (s *PCT) NextIteration() {
 	for i := 0; i < s.Config.ProcessConfig.NumReplicas; i++ {
 		s.InitialPriorities = append(s.InitialPriorities, s.distinctRandomInteger(s.Config.ProcessConfig.NumReplicas, s.InitialPriorities))
 	}
+	s.FaultQuota = s.Config.SchedulerConfig.FaultQuota
 }
 
 func (s *PCT) Reset() {
+	s.FaultQuota = s.Config.SchedulerConfig.FaultQuota
 	s.RequestQuota = s.Config.SchedulerConfig.ClientRequests
 	s.Rand = rand.New(rand.NewSource(int64(s.Config.SchedulerConfig.Seed)))
 }
@@ -92,6 +98,20 @@ func (s *PCT) Shutdown() {
 
 // Returns a random index from available messages
 func (s *PCT) Next(messages []*network.Message, faults []*faults.Fault, context faults.FaultContext) SchedulerDecision {
+	
+	//give fault a chance
+	numberOfFaultsAvailable := len(faults)
+
+	faultRequestIndex := s.GetFaultRequest(numberOfFaultsAvailable)
+	// returns fault
+	if faultRequestIndex >= 0 {
+		return SchedulerDecision{
+			DecisionType: InjectFault,
+			Index:        faultRequestIndex,
+		}
+	}
+	
+	
 	if s.NumPriorityChange < s.Depth {
 		if s.Step == s.PriorityChangePoints[s.NumPriorityChange] {
 			s.NumPriorityChange++
@@ -133,4 +153,54 @@ func (s *PCT) GetClientRequest() int {
 		}
 	}
 	return -1
+}
+
+
+//FOR DROP MESSAGE FAULT
+//returns a fault request based on a probability - INDEPENDENT OF THE SCHEDULERs TYPE
+func (s *PCT) GetFaultRequest(numberOfFaultsAvailable int) int {
+
+	if s.FaultQuota > 0 {
+
+		r := s.Rand.Float64()
+		if r <= s.FaultProbability || s.FaultProbability == 1.0 {
+
+			s.FaultQuota--
+			return s.Rand.Intn(numberOfFaultsAvailable)
+
+		}
+		return -1
+	}
+
+	return -1
+}
+
+// returns messageIDX to be dropped
+func (s *PCT) NextToDrop(messages []*network.Message) int {
+
+	//priority change
+	if s.NumPriorityChange < s.Depth {
+		if s.Step == s.PriorityChangePoints[s.NumPriorityChange] {
+			s.NumPriorityChange++
+		}
+	}
+
+	
+	if len(messages) > 0 {
+
+		s.Step++
+		decision := -1 //decision being -1 
+
+		for i, message := range messages {
+			if message.Sender == s.InitialPriorities[s.NumPriorityChange] {
+				decision = i
+			}
+		}
+
+		return decision //invalid decision is already <0 
+
+	} else { 
+		return -1
+	}
+
 }

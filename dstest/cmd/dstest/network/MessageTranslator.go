@@ -4,13 +4,14 @@ import (
 	"log"
 	"strings"
 	"os"
-
+	"bytes" 
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/hpack"
 )
 
 type MessageTranslator interface {
 	Translate(*Message) *Message
+	TranslateBRPC(*Message) *Message
 }
 
 func NewMessageTranslator(messageType MessageType) MessageTranslator {
@@ -60,5 +61,41 @@ func (t *GRPCTranslator) Translate(message *Message) *Message {
 			}
 		}
 	}
+	return message
+}
+
+//special translation function for baidu
+func (t *GRPCTranslator) TranslateBRPC(message *Message) *Message {
+	f, ok := message.Payload.(*bytes.Buffer)
+	if !ok {
+	    t.Log.Printf("Error: Payload is not of expected type, it is %T\n", message.Payload)
+	    return message
+	}
+
+	payloadStr := f.String()
+
+	    // BRPC has a pattern
+	    startMarker := "RaftService/"
+	    endMarker := "A"
+	
+	    // indices
+	    startIndex := strings.Index(payloadStr, startMarker)
+	    endIndex := strings.Index(payloadStr, endMarker)
+	
+	    // check if markers exist
+	    if startIndex != -1 && endIndex != -1 && endIndex > startIndex {
+	        
+	        extractedStr := payloadStr[startIndex+len(startMarker) : endIndex]
+	        //t.Log.Printf("Extracted String: %s\n", extractedStr)
+	        message.Name =  extractedStr
+
+	    } else {
+
+	        t.Log.Printf("Couldn't extract the message information")
+
+	    }
+
+	message.Type = GRPC
+	
 	return message
 }

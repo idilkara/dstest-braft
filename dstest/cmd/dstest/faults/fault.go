@@ -11,6 +11,7 @@ type FaultContext interface {
 	GetConfig() *config.Config
 	GetNetworkManager() *network.Manager
 	GetProcessManager() *process.ProcessManager
+	GetDropNextMessage() *bool
 }
 
 type Fault interface {

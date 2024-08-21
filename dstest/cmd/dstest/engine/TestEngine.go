@@ -44,6 +44,9 @@ type TestEngine struct {
 	Steps         int
 	SleepDuration time.Duration
 	ReplicaIds    []int
+
+	DropNextMessage *bool //for drop message fault 
+
 }
 
 func (te *TestEngine) Init(config *config.Config) error {
@@ -74,6 +77,9 @@ func (te *TestEngine) Init(config *config.Config) error {
 	}
 
 	te.Log = log.New(os.Stdout, "[TestEngine] ", log.LstdFlags)
+
+	defFalse := false
+	te.DropNextMessage = &defFalse //is this safe? - it works 
 
 	return nil
 }
@@ -137,15 +143,26 @@ func (te *TestEngine) Run() error {
 				if decision.DecisionType == scheduling.SendMessage {
 					action := decision.Index
 					te.NetworkManager.SendMessage(actions[action].MessageId)
+					//get the vector clock info from network manager, add it to name as string
+
+					// Get the vector clock info from the network manager
+					senderVC := te.NetworkManager.VectorClocks[actions[action].Sender]
+					receiverVC := te.NetworkManager.VectorClocks[actions[action].Receiver]
+				
+					// Format the vector clocks into a string
+					vectorClockInfo := fmt.Sprintf("SenderVC: %v ReceiverVC: %v", senderVC, receiverVC)
+					actionNameWithVC := actions[action].Name + " " + vectorClockInfo			
+
 					schedule = append(schedule, Action{
 						Sender:   actions[action].Sender,
 						Receiver: actions[action].Receiver,
-						Name:     actions[action].Name,
+						Name:     actionNameWithVC,
 					})
 					s++
 				}
 
 				if decision.DecisionType == scheduling.InjectFault {
+
 					fault := te.FaultManager.GetFaults()[decision.Index]
 					te.Log.Printf("Applying fault: %+v\n", fault)
 					err := (*fault).ApplyBehaviorIfPreconditionMet(&faultContext)
@@ -153,6 +170,54 @@ func (te *TestEngine) Run() error {
 						te.Log.Printf("Error applying fault: %s\n", err)
 					}
 					// TODO - Append fault to schedule
+
+					schedule = append(schedule, Action{
+						Sender:   -1,
+						Receiver: -1,
+						Name:     fmt.Sprintf("Drop Message Fault"),
+					})
+
+					//This part is specific for drop message faults
+
+					if te.DropNextMessage != nil && *te.DropNextMessage {//  IF DROP MESSAGE FAULT -> drop the NEXT message
+						
+						dropMessageIDX := -1
+						//don't let it pass if there are no messages in the queues.
+						for len(actions) == 0 || dropMessageIDX == -1 {
+							
+							time.Sleep(te.SleepDuration)
+							actions = te.NetworkManager.GetActions()
+
+							if len(actions) != 0 {
+								dropMessageIDX = te.Scheduler.NextToDrop(actions) 
+							}
+							//check for infinite loops 
+
+						}
+
+					
+
+						te.Log.Printf("dropping message ID %d\n",actions[dropMessageIDX].MessageId)
+						senderVC := te.NetworkManager.VectorClocks[actions[dropMessageIDX].Sender]
+						receiverVC := te.NetworkManager.VectorClocks[actions[dropMessageIDX].Receiver]
+						// Format the vector clocks into a string
+						vectorClockInfo := fmt.Sprintf("SenderVC: %v ReceiverVC: %v", senderVC, receiverVC)
+						droppedActionNameWithVC := actions[dropMessageIDX].Name + " is dropped " + vectorClockInfo	
+
+						schedule = append(schedule, Action{
+							Sender:   actions[dropMessageIDX].Sender,
+							Receiver: actions[dropMessageIDX].Receiver,
+							Name:    droppedActionNameWithVC , 
+	
+						})
+
+						te.NetworkManager.DropMessage(actions[dropMessageIDX].MessageId)
+						
+						dropNext := false
+						te.DropNextMessage = &dropNext
+
+					}
+
 				}
 
 				time.Sleep(te.SleepDuration)
@@ -166,7 +231,7 @@ func (te *TestEngine) Run() error {
 			wg.Wait()
 
 			te.Log.Println("Checking for bugs...")
-			if te.ProcessManager.BugCandidate {
+			//if te.ProcessManager.BugCandidate {
 				outputFile, err := os.OpenFile(filepath.Join(te.ProcessManager.Basedir, "schedule.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 				if err != nil {
 					te.Log.Printf("Could not create schedule file.\n Err: %s\n", err)
@@ -176,7 +241,7 @@ func (te *TestEngine) Run() error {
 					fmt.Fprintln(outputFile, action)
 				}
 				outputFile.Close()
-			}
+			//}
 			te.Log.Println("Iteration complete.")
 			te.Scheduler.NextIteration()
 		}
@@ -203,6 +268,11 @@ func (efc *EngineFaultContext) GetNetworkManager() *network.Manager {
 
 func (efc *EngineFaultContext) GetProcessManager() *process.ProcessManager {
 	return efc.engine.ProcessManager
+}
+
+//for drop message fault
+func (efc *EngineFaultContext) GetDropNextMessage() *bool {
+	return efc.engine.DropNextMessage
 }
 
 // confirm that EngineFaultContext implements FaultContext
