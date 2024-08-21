@@ -2119,7 +2119,7 @@ int NodeImpl::handle_pre_vote_request(const RequestVoteRequest* request,
                      << " state " << state2str(saved_state);
         return EINVAL;
     }
-
+ 
     PeerId candidate_id;
     if (0 != candidate_id.parse_relative(request->server_id(),_server_id)) {
         LOG(WARNING) << "node " << _group_id << ":" << _server_id

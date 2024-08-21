@@ -20,6 +20,8 @@ func NewFault(Name string, Params map[string]interface{}) (Fault, error) {
 		return NewCrashReplicaFault(Params)
 	case "restart":
 		return NewRestartReplicaFault(Params)
+	case "dropmessage":
+		return NewDropMessageFault(Params)
 	default:
 		return nil, fmt.Errorf("Fault '%s' not found", Name)
 	}

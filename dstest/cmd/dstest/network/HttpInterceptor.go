@@ -144,7 +144,7 @@ func (hi *HttpInterceptor) handleHttp2(initial io.Reader, conn net.Conn) error {
 	hi.NetworkManager.Router.QueueMessage(&Message{
 		Sender:    pair.Sender,
 		Receiver:  pair.Receiver,
-		Payload:   f,
+		Payload:   initial, //f,
 		Type:      "",
 		Name:      "",
 		MessageId: hi.NetworkManager.GenerateUniqueId(),

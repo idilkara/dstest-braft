@@ -34,7 +34,7 @@ void RaftServiceImpl::pre_vote(google::protobuf::RpcController* cntl_base,
                           google::protobuf::Closure* done) {
     brpc::ClosureGuard done_guard(done);
     brpc::Controller* cntl =
-        static_cast<brpc::Controller*>(cntl_base);
+        static_cast<brpc::Controller*>(cntl_base);  
 
     PeerId peer_id;
     if (0 != peer_id.parse_special(request->peer_id())) {

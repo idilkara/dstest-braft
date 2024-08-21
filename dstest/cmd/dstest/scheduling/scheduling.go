@@ -15,6 +15,7 @@ type Scheduler interface {
 	GetClientRequest() int
 	Next([]*network.Message, []*faults.Fault, faults.FaultContext) SchedulerDecision
 	ApplyFault(*faults.Fault) error
+	NextToDrop([]*network.Message) int
 }
 
 type DecisionType int
@@ -50,6 +51,8 @@ const (
 	QL     SchedulerType = "ql"
 	Pct    SchedulerType = "pct"
 	Replay SchedulerType = "replay"
+	Pos    SchedulerType = "pos"
+	PosConflict SchedulerType = "posconflict"
 )
 
 func NewScheduler(schedulerType SchedulerType) (Scheduler, error) {
@@ -62,6 +65,10 @@ func NewScheduler(schedulerType SchedulerType) (Scheduler, error) {
 		return new(PCT), nil
 	case Replay:
 		return new(ReplayScheduler), nil
+	case Pos:
+		return new(POS), nil
+	case PosConflict:
+		return new(POSConflict), nil
 	default:
 		return nil, fmt.Errorf("unknown scheduler type: %s", schedulerType)
 	}

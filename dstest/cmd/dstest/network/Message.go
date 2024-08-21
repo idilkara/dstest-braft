@@ -16,7 +16,8 @@ type Message struct {
 	MessageId uint64
 	// Metadata is any additional data that can be annotated to the message.
 	//Metadata map[string]any
-
+	//SenderVectorClock  map[int]int 
+	//ReceiverVectorClock map[int]int
 	// A channel to trigger sending the response
 	Send chan struct{}
 }

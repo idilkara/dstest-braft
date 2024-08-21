@@ -72,6 +72,27 @@ struct PeerId {
         return role == WITNESS;
     }
 
+    //this is the original parse function used to parse the perrID information
+    int parse(const std::string& str) {
+        reset();
+        char ip_str[64];
+        int value = REPLICA;
+        if (2 > sscanf(str.c_str(), "%[^:]%*[:]%d%*[:]%d%*[:]%d", ip_str, &addr.port, &idx, &value)) {
+            reset();
+            return -1;
+        }
+        role = (Role)value;
+        if (role > WITNESS) {
+            reset();
+            return -1;
+        }
+        if (0 != butil::str2ip(ip_str, &addr.ip)) {
+            reset();
+            return -1;
+        }
+        return 0;
+    }
+
     //Special parse functions to make braft compatible with dstest 
 
     //called in raft_service.cpp and route_table.cpp
@@ -155,26 +176,6 @@ struct PeerId {
         return 0;
     }
 
-
-    int parse(const std::string& str) {
-        reset();
-        char ip_str[64];
-        int value = REPLICA;
-        if (2 > sscanf(str.c_str(), "%[^:]%*[:]%d%*[:]%d%*[:]%d", ip_str, &addr.port, &idx, &value)) {
-            reset();
-            return -1;
-        }
-        role = (Role)value;
-        if (role > WITNESS) {
-            reset();
-            return -1;
-        }
-        if (0 != butil::str2ip(ip_str, &addr.ip)) {
-            reset();
-            return -1;
-        }
-        return 0;
-    }
 
     std::string to_string() const {
         char str[128];

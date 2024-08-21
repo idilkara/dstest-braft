@@ -23,6 +23,7 @@ type SchedulerConfig struct {
 	ClientRequests int
 	Seed           int
 	Params         map[string]any
+	FaultQuota	   int
 }
 
 type NetworkConfig struct {
