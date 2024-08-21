@@ -2121,7 +2121,7 @@ int NodeImpl::handle_pre_vote_request(const RequestVoteRequest* request,
     }
 
     PeerId candidate_id;
-    if (0 != candidate_id.parse(request->server_id())) {
+    if (0 != candidate_id.parse_relative(request->server_id(),_server_id)) {
         LOG(WARNING) << "node " << _group_id << ":" << _server_id
                      << " received PreVote from " << request->server_id()
                      << " server_id bad format";
@@ -2188,7 +2188,7 @@ int NodeImpl::handle_request_vote_request(const RequestVoteRequest* request,
     }
 
     PeerId candidate_id;
-    if (0 != candidate_id.parse(request->server_id())) {
+    if (0 != candidate_id.parse_relative(request->server_id(),_server_id)) {
         LOG(WARNING) << "node " << _group_id << ":" << _server_id
                      << " received RequestVote from " << request->server_id()
                      << " server_id bad format";
@@ -2409,7 +2409,7 @@ void NodeImpl::handle_append_entries_request(brpc::Controller* cntl,
     }
 
     PeerId server_id;
-    if (0 != server_id.parse(request->server_id())) {
+    if (0 != server_id.parse_relative(request->server_id(),_server_id)) {
         lck.unlock();
         LOG(WARNING) << "node " << _group_id << ":" << _server_id
                      << " received AppendEntries from " << request->server_id()
