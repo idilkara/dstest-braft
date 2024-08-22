@@ -1,0 +1,63 @@
+I0822 15:46:43.842953 26421     0 /src/braft_builder/brpc/src/brpc/server.cpp:1207] Server[braft::RaftStatImpl+braft::FileServiceImpl+braft::RaftServiceImpl+braft::CliServiceImpl+example::CounterServiceImpl] is serving on port=8100.
+I0822 15:46:43.844124 26421     0 /src/braft_builder/brpc/src/brpc/server.cpp:1210] Check out http://61bf1ad330f2:8100 in web browser.
+I0822 15:46:43.844980 26421     0 /src/braft_builder/braft/src/braft/log.cpp:698] Use crc32c as the checksum type of appending entries
+W0822 15:46:43.845253 26421     0 /src/braft_builder/braft/src/braft/protobuf_file.cpp:91] open file failed, path: ./data/log/log_meta: FILE_ERROR_NOT_FOUND
+W0822 15:46:43.845680 26421     0 /src/braft_builder/braft/src/braft/log.cpp:709] ./data/log is empty
+I0822 15:46:43.848430 26421     0 /src/braft_builder/braft/src/braft/log.cpp:1165] log save_meta ./data/log/log_meta first_log_index: 1 time: 2481
+W0822 15:46:43.848890 26421     0 /src/braft_builder/braft/src/braft/protobuf_file.cpp:91] open file failed, path: ./data/raft_meta/raft_meta: FILE_ERROR_NOT_FOUND
+I0822 15:46:43.849119 26421     0 /src/braft_builder/braft/src/braft/raft_meta.cpp:521] Loaded single stable meta, path ./data/raft_meta term 1 votedfor 0.0.0.0:0:0:0 time: 224
+I0822 15:46:43.849326 26421     0 /src/braft_builder/braft/src/braft/node.cpp:628] node Counter:172.17.0.2:8100:0:0 init, term: 1 last_log_id: (index=0,term=0) conf: 172.17.0.2:8100:0:0,172.17.0.2:10001:0:0,172.17.0.2:10002:0:0 old_conf: 
+I0822 15:46:43.849612 26421     0 /src/braft_builder/braft/example/counter_modified/server.cpp:391] Counter service is running on 0.0.0.0:8100
+I0822 15:46:49.733790 26458 4294972160 /src/braft_builder/braft/src/braft/node.cpp:1616] node Counter:172.17.0.2:8100:0:0 term 1 start pre_vote
+I0822 15:46:49.832606 26451 4294970625 /src/braft_builder/braft/src/braft/node.cpp:2157] node Counter:172.17.0.2:8100:0:0 received PreVote from 172.17.0.2:8102:0:0 in term 2 current_term 1 granted 1 rejected_by_lease 0
+I0822 15:46:50.010950 26450 17179869954 /src/braft_builder/braft/src/braft/node.cpp:2157] node Counter:172.17.0.2:8100:0:0 received PreVote from 172.17.0.2:8101:0:0 in term 2 current_term 1 granted 1 rejected_by_lease 0
+W0822 15:46:54.595021 26457 4294971137 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=8589934689 fd=11 addr=127.0.0.1:32846:8100} (0x5652b3d6ab00): Connection reset by peer
+W0822 15:46:54.734491 26451 4294972161 /src/braft_builder/braft/src/braft/node.cpp:1596] node Counter:172.17.0.2:8100:0:0 request PreVote from 172.17.0.2:10001:0:0 error: [E1008]Reached timeout=5000ms @172.17.0.2:10001
+W0822 15:46:54.734873 26451 4294972162 /src/braft_builder/braft/src/braft/node.cpp:1596] node Counter:172.17.0.2:8100:0:0 request PreVote from 172.17.0.2:10002:0:0 error: [E1008]Reached timeout=5000ms @172.17.0.2:10002
+W0822 15:46:54.768103 26455 8589935363 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=186 fd=12 addr=127.0.0.1:32848:8100} (0x5652b3ebc000): Connection reset by peer
+I0822 15:46:54.998934 26451 4294972163 /src/braft_builder/braft/src/braft/node.cpp:1616] node Counter:172.17.0.2:8100:0:0 term 1 start pre_vote
+I0822 15:46:55.132314 26458 21474836739 /src/braft_builder/braft/src/braft/node.cpp:1541] node Counter:172.17.0.2:8100:0:0 received PreVoteResponse from 172.17.0.2:10001:0:0 term 1 granted 1 rejected_by_lease 0 disrupted 0
+I0822 15:46:55.132581 26458 21474836739 /src/braft_builder/braft/src/braft/node.cpp:1682] node Counter:172.17.0.2:8100:0:0 term 1 start vote and grant vote self
+I0822 15:46:55.137930 26458 21474836739 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 2 votedfor 172.17.0.2:8100:0:0 time: 4880
+W0822 15:46:55.268565 26455 17179869956 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=280 fd=10 addr=172.17.0.2:10002:44682} (0x5652b3f642c0): Connection reset by peer
+W0822 15:46:55.269041 26455 4294968069 /src/braft_builder/braft/src/braft/node.cpp:1596] node Counter:172.17.0.2:8100:0:0 request PreVote from 172.17.0.2:10002:0:0 error: [E104]Fail to read from Socket{id=280fd=10 addr=172.17.0.2:10002:44682} (0x0x5652b3f642c0): Connection reset by peer
+W0822 15:46:55.472289 26451 8589939459 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=17179869277 fd=12 addr=172.17.0.2:10001:54280} (0x5652b3d6a000): Connection reset by peer
+W0822 15:46:55.472723 26451 8589939458 /src/braft_builder/braft/src/braft/node.cpp:1483] node Counter:172.17.0.2:8100:0:0 received RequestVoteResponse from 172.17.0.2:10001:0:0 error: [E104]Fail to read from Socket{id=17179869277fd=12 addr=172.17.0.2:10001:54280} (0x0x5652b3d6a000): Connection reset by peer
+I0822 15:46:55.666273 26462 21474841344 /src/braft_builder/braft/src/braft/node.cpp:2157] node Counter:172.17.0.2:8100:0:0 received PreVote from 172.17.0.2:8102:0:0 in term 3 current_term 2 granted 1 rejected_by_lease 0
+I0822 15:46:55.674092 26457 21474837251 /src/braft_builder/braft/src/braft/node.cpp:2239] node Counter:172.17.0.2:8100:0:0 received RequestVote from 172.17.0.2:8102:0:0 in term 3 current_term 2 log_is_ok 1 votable_time 0
+I0822 15:46:55.681305 26457 21474837251 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 3 votedfor 0.0.0.0:0:0:0 time: 6854
+I0822 15:46:55.685182 26457 21474837251 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 3 votedfor 172.17.0.2:10002:0:0 time: 3613
+W0822 15:47:00.133208 26458 4294972164 /src/braft_builder/braft/src/braft/node.cpp:1483] node Counter:172.17.0.2:8100:0:0 received RequestVoteResponse from 172.17.0.2:10002:0:0 error: [E1008]Reached timeout=5000ms @172.17.0.2:10002
+I0822 15:47:00.504239 26455 17179869957 /src/braft_builder/braft/src/braft/node.cpp:2157] node Counter:172.17.0.2:8100:0:0 received PreVote from 172.17.0.2:8101:0:0 in term 4 current_term 3 granted 1 rejected_by_lease 0
+W0822 15:47:00.594673 26458 8589939460 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=17179869281 fd=10 addr=127.0.0.1:32868:8100} (0x5652b3d6ab00): Connection reset by peer
+I0822 15:47:00.612903 26462 34359743232 /src/braft_builder/braft/src/braft/node.cpp:2239] node Counter:172.17.0.2:8100:0:0 received RequestVote from 172.17.0.2:8101:0:0 in term 4 current_term 3 log_is_ok 1 votable_time 0
+I0822 15:47:00.618312 26462 34359743232 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 4 votedfor 0.0.0.0:0:0:0 time: 5078
+I0822 15:47:00.620974 26462 34359743232 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 4 votedfor 172.17.0.2:10001:0:0 time: 2333
+W0822 15:47:00.779342 26457 25769804547 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=374 fd=9 addr=127.0.0.1:33422:8100} (0x5652b3fb0580): Connection reset by peer
+I0822 15:47:00.803674 26458 4294972165 /src/braft_builder/braft/src/braft/node.cpp:1616] node Counter:172.17.0.2:8100:0:0 term 4 start pre_vote
+I0822 15:47:00.973354 26455 34359739139 /src/braft_builder/braft/src/braft/node.cpp:1541] node Counter:172.17.0.2:8100:0:0 received PreVoteResponse from 172.17.0.2:10001:0:0 term 4 granted 1 rejected_by_lease 0 disrupted 0
+I0822 15:47:00.973621 26455 34359739139 /src/braft_builder/braft/src/braft/node.cpp:1682] node Counter:172.17.0.2:8100:0:0 term 4 start vote and grant vote self
+I0822 15:47:00.978195 26455 34359739139 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 5 votedfor 172.17.0.2:8100:0:0 time: 4185
+I0822 15:47:00.992845 26462 17179869953 /src/braft_builder/braft/src/braft/node.cpp:1432] node Counter:172.17.0.2:8100:0:0 received RequestVoteResponse from 172.17.0.2:10001:0:0 term 5 granted 1 rejected_by_lease 0 disrupted 0
+I0822 15:47:00.993072 26462 17179869953 /src/braft_builder/braft/src/braft/node.cpp:1936] node Counter:172.17.0.2:8100:0:0 term 5 become leader of group 172.17.0.2:8100:0:0,172.17.0.2:10001:0:0,172.17.0.2:10002:0:0 
+I0822 15:47:00.993332 26462 17179869953 /src/braft_builder/braft/src/braft/replicator.cpp:144] Replicator=3302829850637@172.17.0.2:10001:0:0 is started, group Counter
+I0822 15:47:00.993739 26462 17179869953 /src/braft_builder/braft/src/braft/replicator.cpp:144] Replicator=4419521347585@172.17.0.2:10002:0:0 is started, group Counter
+I0822 15:47:00.994645 26455 4294970881 /src/braft_builder/braft/src/braft/log.cpp:117] Created new segment `./data/log/log_inprogress_00000000000000000001' with fd=11
+I0822 15:47:01.421440 26450 38654706435 /src/braft_builder/braft/example/counter_modified/server.cpp:300] Configuration of this group is 172.17.0.2:8100:0:0,172.17.0.2:10001:0:0,172.17.0.2:10002:0:0
+I0822 15:47:01.421806 26450 38654706435 /src/braft_builder/braft/src/braft/node.cpp:3334] node Counter:172.17.0.2:8100:0:0 reset ConfigurationCtx, new_peers: 172.17.0.2:8100:0:0,172.17.0.2:10001:0:0,172.17.0.2:10002:0:0, old_peers: 172.17.0.2:8100:0:0,172.17.0.2:10001:0:0,172.17.0.2:10002:0:0
+I0822 15:47:01.422010 26450 38654706435 /src/braft_builder/braft/example/counter_modified/server.cpp:286] Node becomes leader
+I0822 15:47:02.323716 26455 4294972170 /src/braft_builder/braft/src/braft/node.cpp:975] node Counter:172.17.0.2:8100:0:0 starts to do snapshot
+I0822 15:47:02.324577 26458 8589939465 /src/braft_builder/braft/example/counter_modified/server.cpp:236] Saving snapshot to ./data/snapshot/temp/data
+I0822 15:47:02.332740 26458 8589939463 /src/braft_builder/braft/src/braft/snapshot.cpp:642] Deleting ./data/snapshot/snapshot_00000000000000000001
+I0822 15:47:02.333049 26458 8589939463 /src/braft_builder/braft/src/braft/snapshot.cpp:648] Renaming ./data/snapshot/temp to ./data/snapshot/snapshot_00000000000000000001
+I0822 15:47:02.333415 26458 8589939463 /src/braft_builder/braft/src/braft/snapshot_executor.cpp:234] node Counter:172.17.0.2:8100:0:0 snapshot_save_done, last_included_index=1 last_included_term=5
+W0822 15:47:04.593259 26457 4294972173 /src/braft_builder/braft/src/braft/replicator.cpp:305] Group Counter fail to issue RPC to 172.17.0.2:10001:0:0 _consecutive_error_times=1, [E1014]Got EOF of Socket{id=17179869284fd=9 addr=172.17.0.2:10001:60920} (0x0x5652b3d6b340) [R1][E1008]Reached timeout=2500ms @172.17.0.2:10001
+W0822 15:47:05.334385 26451 60129547008 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=8589934779 fd=14 addr=172.17.0.2:10001:60940} (0x5652b3ebc2c0): Connection reset by peer
+W0822 15:47:05.804404 26455 4294972175 /src/braft_builder/braft/src/braft/node.cpp:1596] node Counter:172.17.0.2:8100:0:0 request PreVote from 172.17.0.2:10002:0:0 error: [E1008]Reached timeout=5000ms @172.17.0.2:10002
+W0822 15:47:05.974164 26450 4294972176 /src/braft_builder/braft/src/braft/node.cpp:1483] node Counter:172.17.0.2:8100:0:0 received RequestVoteResponse from 172.17.0.2:10002:0:0 error: [E1008]Reached timeout=5000ms @172.17.0.2:10002
+W0822 15:47:06.170946 26457 4294972179 /src/braft_builder/braft/src/braft/replicator.cpp:305] Group Counter fail to issue RPC to 172.17.0.2:10002:0:0 _consecutive_error_times=1, [E1014]Got EOF of Socket{id=8589934969fd=14 addr=172.17.0.2:10002:43328} (0x0x5652b3fb0dc0) [R1][E1008]Reached timeout=2500ms @172.17.0.2:10002
+W0822 15:47:09.914564 26462 34359741953 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=25769804151 fd=9 addr=172.17.0.2:10002:43494} (0x5652b3fb0840): Connection reset by peer
+W0822 15:47:10.037231 26451 8589939457 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=60129542425 fd=12 addr=172.17.0.2:10001:54000} (0x5652b3f64580): Connection reset by peer
+W0822 15:47:11.172029 26458 34359743235 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=25769803963 fd=12 addr=172.17.0.2:10002:43520} (0x5652b3ebc2c0): Connection reset by peer
+W0822 15:47:12.238871 26457 17179874071 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=77309411609 fd=10 addr=172.17.0.2:10002:43532} (0x5652b3f64580): Connection reset by peer
+W0822 15:47:12.550169 26455 68719481602 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=25769803874 fd=9 addr=172.17.0.2:10002:43542} (0x5652b3d6adc0): Connection reset by peer
