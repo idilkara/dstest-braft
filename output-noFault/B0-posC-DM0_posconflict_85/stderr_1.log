@@ -1,0 +1,22 @@
+I0821 20:04:08.779144 25596     0 /src/braft_builder/brpc/src/brpc/server.cpp:1207] Server[braft::RaftStatImpl+braft::FileServiceImpl+braft::RaftServiceImpl+braft::CliServiceImpl+example::CounterServiceImpl] is serving on port=8101.
+I0821 20:04:08.779880 25596     0 /src/braft_builder/brpc/src/brpc/server.cpp:1210] Check out http://4af9cd3bfe90:8101 in web browser.
+I0821 20:04:08.780787 25596     0 /src/braft_builder/braft/src/braft/log.cpp:698] Use crc32c as the checksum type of appending entries
+W0821 20:04:08.781048 25596     0 /src/braft_builder/braft/src/braft/protobuf_file.cpp:91] open file failed, path: ./data/log/log_meta: FILE_ERROR_NOT_FOUND
+W0821 20:04:08.781535 25596     0 /src/braft_builder/braft/src/braft/log.cpp:709] ./data/log is empty
+I0821 20:04:08.785012 25596     0 /src/braft_builder/braft/src/braft/log.cpp:1165] log save_meta ./data/log/log_meta first_log_index: 1 time: 3242
+W0821 20:04:08.785398 25596     0 /src/braft_builder/braft/src/braft/protobuf_file.cpp:91] open file failed, path: ./data/raft_meta/raft_meta: FILE_ERROR_NOT_FOUND
+I0821 20:04:08.785631 25596     0 /src/braft_builder/braft/src/braft/raft_meta.cpp:521] Loaded single stable meta, path ./data/raft_meta term 1 votedfor 0.0.0.0:0:0:0 time: 225
+I0821 20:04:08.785873 25596     0 /src/braft_builder/braft/src/braft/node.cpp:628] node Counter:172.17.0.2:8101:0:0 init, term: 1 last_log_id: (index=0,term=0) conf: 172.17.0.2:8101:0:0,172.17.0.2:10003:0:0,172.17.0.2:10005:0:0 old_conf: 
+I0821 20:04:08.786075 25596     0 /src/braft_builder/braft/example/counter_modified/server.cpp:391] Counter service is running on 0.0.0.0:8101
+I0821 20:04:11.077266 25608 4294972160 /src/braft_builder/braft/src/braft/node.cpp:975] node Counter:172.17.0.2:8101:0:0 starts to do snapshot
+I0821 20:04:11.077649 25608 4294972160 /src/braft_builder/braft/src/braft/snapshot_executor.cpp:154] node Counter:172.17.0.2:8101:0:0 the gap between fsm applied index 0 and last_snapshot_index 0 is less than 1, will clear bufferred logs and return success
+I0821 20:04:14.424657 25604 8589935361 /src/braft_builder/braft/src/braft/node.cpp:2157] node Counter:172.17.0.2:8101:0:0 received PreVote from 172.17.0.2:8102:0:0 in term 2 current_term 1 granted 1 rejected_by_lease 0
+I0821 20:04:14.576116 25615 12884905985 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 2 votedfor 0.0.0.0:0:0:0 time: 6222
+I0821 20:04:14.576811 25606 4294971394 /src/braft_builder/braft/example/counter_modified/server.cpp:306] Node start following { leader_id=172.17.0.2:10005:0:0, term=2, status=Raft node receives message from new leader with higher term.}
+I0821 20:04:14.577513 25604 4294968066 /src/braft_builder/braft/src/braft/log.cpp:117] Created new segment `./data/log/log_inprogress_00000000000000000001' with fd=10
+I0821 20:04:14.771761 25605 17179869185 /src/braft_builder/braft/src/braft/node.cpp:2157] node Counter:172.17.0.2:8101:0:0 received PreVote from 172.17.0.2:8100:0:0 in term 3 current_term 2 granted 0 rejected_by_lease 0
+W0821 20:04:15.029918 25605 21474836481 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=186 fd=9 addr=127.0.0.1:56374:8101} (0x55834f280000): Connection reset by peer
+I0821 20:04:18.409219 25615 25769804546 /src/braft_builder/braft/example/counter_modified/server.cpp:300] Configuration of this group is 172.17.0.2:8102:0:0,172.17.0.2:10006:0:0,172.17.0.2:10007:0:0
+W0821 20:04:26.163057 25604 38654709762 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=51539607645 fd=9 addr=127.0.0.1:51084:8101} (0x55834f164000): Connection reset by peer
+W0821 20:04:31.582974 25606 90194313218 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=375 fd=9 addr=127.0.0.1:42620:8101} (0x55834f426840): Connection reset by peer
+W0821 20:04:32.793970 25604 60129546242 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=42949673146 fd=9 addr=127.0.0.1:42628:8101} (0x55834f280000): Connection reset by peer
