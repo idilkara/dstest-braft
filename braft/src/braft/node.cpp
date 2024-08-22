@@ -603,7 +603,9 @@ int NodeImpl::init(const NodeOptions& options) {
     }
 
     // first start, we can vote directly
-    if (_current_term == 1 && _voted_id.is_empty()) {
+    if (_current_term == 1 
+   // && _voted_id.is_empty()
+    ) {
         _follower_lease.reset();
     }
 
@@ -1703,7 +1705,7 @@ void NodeImpl::elect_self(std::unique_lock<raft_mutex_t>* lck,
 
     _state = STATE_CANDIDATE;
     _current_term++;
-    _voted_id = _server_id;
+    _voted_id = _server_id; //vote to self
 
     BRAFT_VLOG << "node " << _group_id << ":" << _server_id
                << " term " << _current_term << " start vote_timer";
@@ -1742,8 +1744,8 @@ void NodeImpl::elect_self(std::unique_lock<raft_mutex_t>* lck,
                       " error: " << status;
         // reset _voted_id to avoid inconsistent cases
         // return immediately without granting _vote_ctx
-        _voted_id.reset();
-        return;
+      //  _voted_id.reset(); // I want inconsistent cases
+       // return;
     }
     grant_self(&_vote_ctx, lck);
 }
@@ -2259,7 +2261,9 @@ int NodeImpl::handle_request_vote_request(const RequestVoteRequest* request,
         }
 
         // save
-        if (log_is_ok && _voted_id.is_empty()) {
+        if (log_is_ok 
+        //&& _voted_id.is_empty()
+        ) {
             butil::Status status;
             status.set_error(EVOTEFORCANDIDATE, "Raft node votes for some candidate, "
                     "step down to restart election_timer.");
@@ -2274,7 +2278,7 @@ int NodeImpl::handle_request_vote_request(const RequestVoteRequest* request,
                            << " because failed to set_votedfor it, error: "
                            << status;
                 // reset _voted_id to response set_granted(false)
-                _voted_id.reset(); 
+               // _voted_id.reset(); 
             }
         }
     } while (0);
