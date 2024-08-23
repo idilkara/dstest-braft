@@ -1,0 +1,24 @@
+I0822 21:07:45.068676  4326     0 /src/braft_builder/brpc/src/brpc/server.cpp:1207] Server[braft::RaftStatImpl+braft::FileServiceImpl+braft::RaftServiceImpl+braft::CliServiceImpl+example::CounterServiceImpl] is serving on port=8100.
+I0822 21:07:45.069464  4326     0 /src/braft_builder/brpc/src/brpc/server.cpp:1210] Check out http://6ccbca95f2c2:8100 in web browser.
+I0822 21:07:45.071207  4326     0 /src/braft_builder/braft/src/braft/log.cpp:698] Use crc32c as the checksum type of appending entries
+W0822 21:07:45.071447  4326     0 /src/braft_builder/braft/src/braft/protobuf_file.cpp:91] open file failed, path: ./data/log/log_meta: FILE_ERROR_NOT_FOUND
+W0822 21:07:45.071852  4326     0 /src/braft_builder/braft/src/braft/log.cpp:709] ./data/log is empty
+I0822 21:07:45.075204  4326     0 /src/braft_builder/braft/src/braft/log.cpp:1165] log save_meta ./data/log/log_meta first_log_index: 1 time: 3191
+W0822 21:07:45.075561  4326     0 /src/braft_builder/braft/src/braft/protobuf_file.cpp:91] open file failed, path: ./data/raft_meta/raft_meta: FILE_ERROR_NOT_FOUND
+I0822 21:07:45.075768  4326     0 /src/braft_builder/braft/src/braft/raft_meta.cpp:521] Loaded single stable meta, path ./data/raft_meta term 1 votedfor 0.0.0.0:0:0:0 time: 197
+I0822 21:07:45.075971  4326     0 /src/braft_builder/braft/src/braft/node.cpp:630] node Counter:172.17.0.2:8100:0:0 init, term: 1 last_log_id: (index=0,term=0) conf: 172.17.0.2:8100:0:0,172.17.0.2:10001:0:0,172.17.0.2:10002:0:0 old_conf: 
+I0822 21:07:45.076176  4326     0 /src/braft_builder/braft/example/counter_modified/server.cpp:391] Counter service is running on 0.0.0.0:8100
+I0822 21:07:50.608671  4347 4294972160 /src/braft_builder/braft/src/braft/node.cpp:1618] node Counter:172.17.0.2:8100:0:0 term 1 start pre_vote
+I0822 21:07:50.905349  4341 8589934849 /src/braft_builder/braft/src/braft/node.cpp:2159] node Counter:172.17.0.2:8100:0:0 received PreVote from 172.17.0.2:8101:0:0 in term 2 current_term 1 granted 1 rejected_by_lease 0
+W0822 21:07:50.956042  4345 8589937665 /src/braft_builder/braft/src/braft/node.cpp:1533] node Counter:172.17.0.2:8100:0:0 received invalid PreVoteResponse from 172.17.0.2:10001:0:0 term 2 expect 1
+I0822 21:07:50.959980  4345 8589937665 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 2 votedfor 0.0.0.0:0:0:0 time: 3326
+I0822 21:07:50.976709  4341 17179869441 /src/braft_builder/braft/src/braft/node.cpp:2159] node Counter:172.17.0.2:8100:0:0 received PreVote from 172.17.0.2:8102:0:0 in term 2 current_term 2 granted 1 rejected_by_lease 0
+I0822 21:07:51.053821  4347 17179874048 /src/braft_builder/braft/src/braft/node.cpp:2241] node Counter:172.17.0.2:8100:0:0 received RequestVote from 172.17.0.2:8101:0:0 in term 2 current_term 2 log_is_ok 1 votable_time 0
+I0822 21:07:51.059303  4347 17179874048 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 2 votedfor 172.17.0.2:10001:0:0 time: 5100
+W0822 21:07:51.064680  4341 21474836737 /src/braft_builder/braft/src/braft/node.cpp:1510] node Counter:172.17.0.2:8100:0:0 received invalid PreVoteResponse from 172.17.0.2:10002:0:0 ctx_version 2 current_ctx_version 4
+I0822 21:07:51.083125  4338 4294969345 /src/braft_builder/braft/example/counter_modified/server.cpp:306] Node start following { leader_id=172.17.0.2:10001:0:0, term=2, status=Follower receives message from new leader with the same term.}
+I0822 21:07:51.084437  4345 4294970370 /src/braft_builder/braft/src/braft/log.cpp:117] Created new segment `./data/log/log_inprogress_00000000000000000001' with fd=11
+I0822 21:07:51.605137  4336 4294967556 /src/braft_builder/braft/example/counter_modified/server.cpp:300] Configuration of this group is 172.17.0.2:8101:0:0,172.17.0.2:10003:0:0,172.17.0.2:10005:0:0
+W0822 21:07:51.629472  4345 8589937666 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=8589934964 fd=10 addr=127.0.0.1:41218:8100} (0x55c0bb29e000): Connection reset by peer
+W0822 21:07:55.522616  4347 34359743232 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=279 fd=9 addr=127.0.0.1:41202:8100} (0x55c0bb24a000): Connection reset by peer
+W0822 21:07:55.750389  4345 21474839554 /src/braft_builder/brpc/src/brpc/input_messenger.cpp:381] Fail to read from Socket{id=17179869280 fd=10 addr=127.0.0.1:41242:8100} (0x55c0bb0bc840): Connection reset by peer
