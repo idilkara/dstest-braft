@@ -1,7 +1,7 @@
 This is a repository to test braft and some versions of it using DSTest.
 Instead of using these repositories as submodules, I cloned them as a preference. 
 
-- The links to the oriiginal repositories are here,
+- The links to the original repositories are here,
 
 dstest: https://github.com/egeberkaygulcan/dstest.git
 
