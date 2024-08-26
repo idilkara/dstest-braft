@@ -1,0 +1,35 @@
+I0826 15:49:34.578149  8173     0 /src/braft_builder/brpc/src/brpc/server.cpp:1207] Server[braft::RaftStatImpl+braft::FileServiceImpl+braft::RaftServiceImpl+braft::CliServiceImpl+example::CounterServiceImpl] is serving on port=8100.
+I0826 15:49:34.579025  8173     0 /src/braft_builder/brpc/src/brpc/server.cpp:1210] Check out http://0b6759156025:8100 in web browser.
+I0826 15:49:34.579740  8173     0 /src/braft_builder/braft/src/braft/log.cpp:698] Use crc32c as the checksum type of appending entries
+W0826 15:49:34.579963  8173     0 /src/braft_builder/braft/src/braft/protobuf_file.cpp:91] open file failed, path: ./data/log/log_meta: FILE_ERROR_NOT_FOUND
+W0826 15:49:34.580367  8173     0 /src/braft_builder/braft/src/braft/log.cpp:709] ./data/log is empty
+I0826 15:49:34.583744  8173     0 /src/braft_builder/braft/src/braft/log.cpp:1165] log save_meta ./data/log/log_meta first_log_index: 1 time: 3173
+W0826 15:49:34.584111  8173     0 /src/braft_builder/braft/src/braft/protobuf_file.cpp:91] open file failed, path: ./data/raft_meta/raft_meta: FILE_ERROR_NOT_FOUND
+I0826 15:49:34.584295  8173     0 /src/braft_builder/braft/src/braft/raft_meta.cpp:521] Loaded single stable meta, path ./data/raft_meta term 1 votedfor 0.0.0.0:0:0:0 time: 180
+I0826 15:49:34.584505  8173     0 /src/braft_builder/braft/src/braft/node.cpp:627] node Counter:172.17.0.2:8100:0:0 init, term: 1 last_log_id: (index=0,term=0) conf: 172.17.0.2:8100:0:0,172.17.0.2:10001:0:0,172.17.0.2:10002:0:0 old_conf: 
+I0826 15:49:34.584708  8173     0 /src/braft_builder/braft/example/counter_modified/server.cpp:391] Counter service is running on 0.0.0.0:8100
+I0826 15:49:40.406948  8186 4294972160 /src/braft_builder/braft/src/braft/node.cpp:1626] node Counter:172.17.0.2:8100:0:0 term 1 start pre_vote
+I0826 15:49:40.423622  8186 8589939456 /src/braft_builder/braft/src/braft/node.cpp:2173] node Counter:172.17.0.2:8100:0:0 received PreVote from 172.17.0.2:8102:0:0 in term 2 current_term 1 granted 1 rejected_by_lease 0
+I0826 15:49:40.435030  8192 17179870465 /src/braft_builder/braft/src/braft/node.cpp:2173] node Counter:172.17.0.2:8100:0:0 received PreVote from 172.17.0.2:8101:0:0 in term 2 current_term 1 granted 1 rejected_by_lease 0
+I0826 15:49:40.467928  8179 12884903170 /src/braft_builder/braft/src/braft/node.cpp:2257] node Counter:172.17.0.2:8100:0:0 received RequestVote from 172.17.0.2:8101:0:0 in term 2 current_term 1 log_is_ok 1 votable_time 0
+I0826 15:49:40.471246  8179 12884903170 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 2 votedfor 0.0.0.0:0:0:0 time: 2892
+I0826 15:49:40.474533  8179 12884903170 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 2 votedfor 172.17.0.2:10001:0:0 time: 3050
+I0826 15:49:40.539951  8186 21474841344 /src/braft_builder/braft/src/braft/node.cpp:2257] node Counter:172.17.0.2:8100:0:0 received RequestVote from 172.17.0.2:8102:0:0 in term 3 current_term 2 log_is_ok 1 votable_time 0
+I0826 15:49:40.544038  8186 21474841344 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 3 votedfor 0.0.0.0:0:0:0 time: 3713
+I0826 15:49:40.548240  8186 21474841344 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 3 votedfor 172.17.0.2:10002:0:0 time: 3901
+I0826 15:49:40.550266  8179 17179870466 /src/braft_builder/braft/src/braft/node.cpp:1551] node Counter:172.17.0.2:8100:0:0 received PreVoteResponse from 172.17.0.2:10002:0:0 term 3 granted 1 rejected_by_lease 0 disrupted 0
+I0826 15:49:40.550441  8179 17179870466 /src/braft_builder/braft/src/braft/node.cpp:1692] node Counter:172.17.0.2:8100:0:0 term 3 start vote and grant vote self
+I0826 15:49:40.554229  8179 17179870466 /src/braft_builder/braft/src/braft/raft_meta.cpp:546] Saved single stable meta, path ./data/raft_meta term 4 votedfor 172.17.0.2:8100:0:0 time: 3363
+F0826 15:49:40.564137  8192 25769805057 /src/braft_builder/braft/src/braft/snapshot_executor.cpp:602] Check failed: new_term >= _term (2 vs 3). 
+#0 0x55ebfad30976 <unknown>
+#1 0x55ebfad011bf <unknown>
+#2 0x55ebfad02088 <unknown>
+#3 0x55ebfad03166 <unknown>
+#4 0x55ebfad1a362 <unknown>
+#5 0x55ebfae3b757 braft::LocalSnapshotPbMeta::IsInitialized()
+#6 0x55ebfadf703b _GLOBAL__sub_I_rpcz_service.cpp
+#7 0x55ebfadf950f _GLOBAL__sub_I_domain_naming_service.cpp
+#8 0x55ebfaed2e34 logging::AsyncLogger::LogTask()
+#9 0x55ebfadac747 <unknown>
+#10 0x55ebfaf5e7a1 butil::DoublyBufferedData<>::DoublyBufferedData()
+
