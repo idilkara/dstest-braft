@@ -15,6 +15,7 @@ type TestConfig struct {
 	Iterations      int
 	WaitDuration    int
 	StartupDuration int
+	RecoveryPoint int
 }
 
 type SchedulerConfig struct {

@@ -44,6 +44,7 @@ type TestEngine struct {
 	Steps         int
 	SleepDuration time.Duration
 	ReplicaIds    []int
+	RecoveryPoint int
 
 	DropNextMessage *bool //for drop message fault 
 
@@ -53,9 +54,11 @@ func (te *TestEngine) Init(config *config.Config) error {
 	te.Config = config
 	te.Experiments = config.TestConfig.Experiments
 	te.Iterations = config.TestConfig.Iterations
+	te.RecoveryPoint = config.TestConfig.RecoveryPoint
 	te.Steps = config.SchedulerConfig.Steps
 	te.SleepDuration = time.Duration(config.TestConfig.WaitDuration) * time.Millisecond
 	te.ReplicaIds = make([]int, te.Config.ProcessConfig.NumReplicas)
+	
 	for i := 0; i < te.Config.ProcessConfig.NumReplicas; i++ {
 		te.ReplicaIds[i] = i
 	}
@@ -85,11 +88,12 @@ func (te *TestEngine) Init(config *config.Config) error {
 }
 
 func (te *TestEngine) Run() error {
+
 	for i := 0; i < te.Experiments; i++ {
 		te.Log.Printf("Starting experiment %d...\n", i+1)
 
 		te.Scheduler.Init(te.Config)
-		for j := 0; j < te.Iterations; j++ {
+		for j := 0; j < te.Iterations; j++ { // 
 			te.Log.Printf("Starting iteration %d\n", j+1)
 
 			// Initialize NetworkManager
@@ -161,63 +165,71 @@ func (te *TestEngine) Run() error {
 					s++
 				}
 
-				if decision.DecisionType == scheduling.InjectFault {
-
-					fault := te.FaultManager.GetFaults()[decision.Index]
-					te.Log.Printf("Applying fault: %+v\n", fault)
-					err := (*fault).ApplyBehaviorIfPreconditionMet(&faultContext)
-					if err != nil {
-						te.Log.Printf("Error applying fault: %s\n", err)
-					}
-					// TODO - Append fault to schedule
-
-					schedule = append(schedule, Action{
-						Sender:   -1,
-						Receiver: -1,
-						Name:     fmt.Sprintf("Drop Message Fault"),
-					})
-
-					//This part is specific for drop message faults
-
-					if te.DropNextMessage != nil && *te.DropNextMessage {//  IF DROP MESSAGE FAULT -> drop the NEXT message
+				if s < te.RecoveryPoint { //can't inject faults after this point
 						
-						dropMessageIDX := -1
-						//don't let it pass if there are no messages in the queues.
-						for len(actions) == 0 || dropMessageIDX == -1 {
-							
-							time.Sleep(te.SleepDuration)
-							actions = te.NetworkManager.GetActions()
+					if decision.DecisionType == scheduling.InjectFault {
 
-							if len(actions) != 0 {
-								dropMessageIDX = te.Scheduler.NextToDrop(actions) 
+						fault := te.FaultManager.GetFaults()[decision.Index]
+						te.Log.Printf("Applying fault: %+v\n", fault)
+						err := (*fault).ApplyBehaviorIfPreconditionMet(&faultContext)
+						if err != nil {
+							te.Log.Printf("Error applying fault: %s\n", err)
+						}
+						// TODO - Append fault to schedule
+
+						schedule = append(schedule, Action{
+							Sender:   -1,
+							Receiver: -1,
+							Name:     fmt.Sprintf("Drop Message Fault"),
+						})
+
+						//This part is specific for drop message faults
+
+						if te.DropNextMessage != nil && *te.DropNextMessage {//  IF DROP MESSAGE FAULT -> drop the NEXT message
+							
+							dropMessageIDX := -1
+							counterDropMsg := 0
+
+							//don't let it pass if there are no messages in the queues.
+							for (len(actions) == 0 || dropMessageIDX == -1 ) && (counterDropMsg != 10){
+								counterDropMsg = counterDropMsg +1
+								time.Sleep(te.SleepDuration)
+								actions = te.NetworkManager.GetActions()
+
+								if len(actions) != 0 {
+									dropMessageIDX = te.Scheduler.NextToDrop(actions) 
+								}
+								//check for infinite loops 
+
 							}
-							//check for infinite loops 
+							
+						
+							if (dropMessageIDX != -1) {
+								te.Log.Printf("dropping message ID %d\n",actions[dropMessageIDX].MessageId)
+								senderVC := te.NetworkManager.VectorClocks[actions[dropMessageIDX].Sender]
+								receiverVC := te.NetworkManager.VectorClocks[actions[dropMessageIDX].Receiver]
+								// Format the vector clocks into a string
+								vectorClockInfo := fmt.Sprintf("SenderVC: %v ReceiverVC: %v", senderVC, receiverVC)
+								droppedActionNameWithVC := actions[dropMessageIDX].Name + " is dropped " + vectorClockInfo	
+
+								schedule = append(schedule, Action{
+									Sender:   actions[dropMessageIDX].Sender,
+									Receiver: actions[dropMessageIDX].Receiver,
+									Name:    droppedActionNameWithVC , 
+			
+								})
+
+								te.NetworkManager.DropMessage(actions[dropMessageIDX].MessageId)
+							}else {
+								te.Log.Printf("No message to drop \n")
+
+							}
+							dropNext := false
+							te.DropNextMessage = &dropNext
 
 						}
 
-					
-
-						te.Log.Printf("dropping message ID %d\n",actions[dropMessageIDX].MessageId)
-						senderVC := te.NetworkManager.VectorClocks[actions[dropMessageIDX].Sender]
-						receiverVC := te.NetworkManager.VectorClocks[actions[dropMessageIDX].Receiver]
-						// Format the vector clocks into a string
-						vectorClockInfo := fmt.Sprintf("SenderVC: %v ReceiverVC: %v", senderVC, receiverVC)
-						droppedActionNameWithVC := actions[dropMessageIDX].Name + " is dropped " + vectorClockInfo	
-
-						schedule = append(schedule, Action{
-							Sender:   actions[dropMessageIDX].Sender,
-							Receiver: actions[dropMessageIDX].Receiver,
-							Name:    droppedActionNameWithVC , 
-	
-						})
-
-						te.NetworkManager.DropMessage(actions[dropMessageIDX].MessageId)
-						
-						dropNext := false
-						te.DropNextMessage = &dropNext
-
 					}
-
 				}
 
 				time.Sleep(te.SleepDuration)
