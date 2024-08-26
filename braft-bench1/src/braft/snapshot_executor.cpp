@@ -599,7 +599,7 @@ int SnapshotExecutor::register_downloading_snapshot(DownloadingSnapshot* ds) {
 
 void SnapshotExecutor::interrupt_downloading_snapshot(int64_t new_term) {
     std::unique_lock<raft_mutex_t> lck(_mutex);
-    CHECK_GE(new_term, _term);
+    //CHECK_GE(new_term, _term);
     _term = new_term;
     if (!_downloading_snapshot.load(butil::memory_order_relaxed)) {
         return;

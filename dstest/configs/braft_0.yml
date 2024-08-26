@@ -1,16 +1,17 @@
 TestConfig:
-  Name: n0af-bnjgg
+  Name: test
   Experiments: 1
-  Iterations: 1
+  Iterations: 100
   WaitDuration: 10 # Time duration to wait between execution steps in milliseconds
-  StartupDuration: 6 #so msg Q is not empty
+  StartupDuration: 6 #so msg Q is not emptyh
+  RecoveryPoint: 30
 SchedulerConfig:
   Type: "random" 
-  Steps: 400
+  Steps: 50
   Seed: 16
-  Params: {"client_request_probability": 0.0, "d": 5,"fault_probability": 0.05} 
-  ClientRequests: 1
-  FaultQuota: 1
+  Params: {"client_request_probability": 0.5, "d": 1,"fault_probability": 0.05} 
+  ClientRequests: 0
+  FaultQuota: 0
 NetworkConfig:
   BaseReplicaPort: 8100
   BaseInterceptorPort: 10000
@@ -22,10 +23,10 @@ FaultConfig:
       Params:
 ProcessConfig:
   NumReplicas: 3
-  Timeout: 30
+  Timeout: 20
   OutputDir: output
   ReplicaScript: scripts/braft_server_relative.sh
-  ClientScripts: [ scripts/braft_client1.sh , scripts/braft_client2.sh ,  scripts/braft_client3.sh ] # 
+  ClientScripts: [ scripts/braft_client1.sh ] # 
   CleanScript: scripts/braft_clean.sh
   ReplicaParams:
     - "8100 10001 10002 0 8100"

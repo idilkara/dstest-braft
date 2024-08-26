@@ -171,7 +171,7 @@ func (hi *HttpInterceptor) handleHttp2(initial io.Reader, conn net.Conn) error {
 	}(&dataSent)
 
 	_, err = io.Copy(dialer, io.MultiReader(initial, dataBuffer, conn))
-	//hi.Log.Println("Copy 2 completed.")
+	hi.Log.Println("Copy 2 completed.")
 	wg.Wait()
 	hi.Log.Println("WG, waited")
 
