@@ -9,7 +9,7 @@ braft: https://github.com/baidu/braft.git
 
 brpc: https://github.com/apache/brpc.git
 
-#Results
+**Results**
 
 | index | benchmark | scheduler | fault condition | number of unique schedules | number of unique traces | number of tests with error or failure logged | unique errors or failures logged | number of possible liveness bugs | number of safety violations | mean execution time           |
 |-------|-----------|-----------|------------------|-----------------------------|--------------------------|--------------------------------------------|---------------------------------|---------------------------------|------------------------------|--------------------------------|
@@ -43,3 +43,10 @@ brpc: https://github.com/apache/brpc.git
 | 27    | b2        | pos       | True             | 100                         | 300                      | 7                                          | {F0826, E0826}                  | 17                              | 0                            | 0 days 00:00:17.692410040     |
 | 28    | b2        | posc      | False            | 100                         | 300                      | 13                                         | {F0826, E0826}                  | 19                              | 0                            | 0 days 00:00:17.283015500     |
 | 29    | b2        | posc      | True             | 100                         | 300                      | 9                                          | {F0826, E0826}                  | 16                              | 0                            | 0 days 00:00:17.732058390     |
+
+
+Errors logged :
+    E0824: 0 /src/braft_builder/brpc/src/bthread/mutex.cpp:497] bthread is suspended while holding1 pthread locks.
+    E0826: /src/braft_builder/braft/src/braft/replicator.cpp:473] Group Counter fail, response term 3 mismatch, expect term 2
+Failures logged : 
+    F0826: Check failed: new_term >= _term (2 vs 3). 
