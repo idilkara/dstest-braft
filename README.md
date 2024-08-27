@@ -46,7 +46,11 @@ brpc: https://github.com/apache/brpc.git
 
 
 Errors logged :
+
     E0824: 0 /src/braft_builder/brpc/src/bthread/mutex.cpp:497] bthread is suspended while holding1 pthread locks.
-    E0826: /src/braft_builder/braft/src/braft/replicator.cpp:473] Group Counter fail, response term 3 mismatch, expect term 2
+
+    E0826: /src/braft_builder/braft/src/braft/replicator.cpp:473] Group Counter fail, response term {int} mismatch, expect term {int}
+
 Failures logged : 
-    F0826: Check failed: new_term >= _term (2 vs 3). 
+
+    F0826: Check failed: new_term >= _term ({int} vs {int}). 
